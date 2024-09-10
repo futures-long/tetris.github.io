@@ -9,57 +9,136 @@
       margin: 0;
       box-sizing: border-box;
     }
+    
+    @media(prefers-color-scheme: light) {
+      html, body {
+        background-image: linear-gradient(#ddf, #cce);
+        display: block;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        font-size: 25px;
+      }
 
-    html, body {
-      background-image: linear-gradient(#ddf, #cce);
-      display: block;
-      width: 100%;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      font-size: 25px;
+      .toparea, .bottomarea {
+        width: 100%;
+        height: 47%;
+        background: transparent;
+        justify-content: center;
+        border-radius: 20px;
+        display: flex;
+      }
+
+      #in, #out {
+        width: 90%;
+        height: 85%;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 20px;
+        resize: none;
+        overflow-wrap: break-word;
+        font-family: Arial, sans-serif;
+        color: #425;
+      }
+
+      .inarea, .outarea {
+        width: 90%;
+        height: 96%;
+        background: rgba(255,255,255,0.5);
+        border: none;
+        outline: none;
+        padding: 0 3%;
+        font-size: 20px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        border-radius: 20px;
+        box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .header {
+        width: 100%;
+        height: 6%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #649;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.15)
+      }
+
+      .copy-btn {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #649;
+        color: white;
+        cursor: pointer;
+      }
+      
+      .copy-btn:hover {
+        background-color: #527;
+      }
     }
 
-    .toparea, .bottomarea {
-      width: 100%;
-      height: 47%;
-      background: transparent;
-      justify-content: center;
-      border-radius: 20px;
-      display: flex;
-    }
+    @media(prefers-color-scheme: dark) {
+      html, body {
+        background-image: linear-gradient(#225, #003);
+        display: block;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        font-size: 25px;
+      }
 
-    #in, #out {
-      width: 90%;
-      height: 85%;
-      background: #fff;
-      border: none;
-      outline: none;
-      font-size: 20px;
-      resize: none;
-      overflow-wrap: break-word;
-      font-family: Arial, sans-serif;
-    }
+      .toparea, .bottomarea {
+        width: 100%;
+        height: 47%;
+        background: transparent;
+        justify-content: center;
+        border-radius: 20px;
+        display: flex;
+      }
 
-    .inarea, .outarea {
-      width: 90%;
-      height: 96%;
-      background: #fff;
-      border: none;
-      outline: none;
-      padding: 0 3%;
-      font-size: 20px;
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      border-radius: 20px;
-    }
+      #in, #out {
+        width: 90%;
+        height: 85%;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 20px;
+        resize: none;
+        overflow-wrap: break-word;
+        font-family: Arial, sans-serif;
+        color: #fff;
+      }
 
-    .header {
-      width: 100%;
-      height: 6%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      .inarea, .outarea {
+        width: 90%;
+        height: 96%;
+        background: rgba(255,255,255,0.1);
+        border: none;
+        outline: none;
+        padding: 0 3%;
+        font-size: 20px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        border-radius: 20px;
+        box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .header {
+        width: 100%;
+        height: 6%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #cbf;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.15)
+      }
     }
   </style>
   <title>Textarea Example</title>
@@ -68,24 +147,37 @@
   <div class="header">Ukrainian native translator</div>
   <div class="toparea">
     <div class="inarea">
-      <textarea id="in" name="" rows="5" placeholder="Введите текст..."></textarea>
+      <textarea id="in" name="" rows="5" placeholder="Enter text...(ru or ua)"></textarea>
     </div>
   </div>
   <div class="bottomarea">
     <div class="outarea">
-      <textarea id="out" name="" rows="5" placeholder="Переведенный текст..."></textarea>
+      <textarea id="out" name="" rows="5" placeholder="Translated text...(native ua)" readonly></textarea>
     </div>
   </div>
+  
   <script>
+    let timeout;
+
     document.getElementById('in').addEventListener('input', function() {
       // Получаем введенный текст
       let inputText = this.value;
 
       // Заменяем все указанные буквы на 'і'
       let translatedText = inputText.replace(/[аоуыиеэ]/gi, 'і');
-
-      // Отображаем измененный текст в нижнем поле
+// Отображаем измененный текст в нижнем поле
       document.getElementById('out').value = translatedText;
+
+      // Устанавливаем размытие
+      document.getElementById('out').style.filter = 'blur(5px)';
+
+      // Очистка таймера, если пользователь продолжает вводить текст
+      clearTimeout(timeout);
+      
+      // Устанавливаем новый таймер на 500 мс
+      timeout = setTimeout(function() {
+        document.getElementById('out').style.filter = 'blur(0px)';
+      }, 300);
     });
   </script>
 </body>
