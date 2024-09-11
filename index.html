@@ -162,7 +162,9 @@
       let inputText = this.value;
 
       // Заменяем все указанные буквы на 'і'
-      let translatedText = inputText.replace(/[аоуыиеэ]/gi, 'і');
+      let translatedText = inputText.replace(/[АОУЫИЭЕаоуыиеэ]/g, function(match) {
+    return match === match.toUpperCase() ? 'І' : 'і';
+});
 // Отображаем измененный текст в нижнем поле
       document.getElementById('out').value = translatedText;
 
